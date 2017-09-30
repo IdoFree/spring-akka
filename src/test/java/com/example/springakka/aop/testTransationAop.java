@@ -26,7 +26,7 @@ public class testTransationAop {
     }
 
 
-    @Test
+//    @Test
     public void testFindAll(){
         EventDao basicDao = new EventDao();
         List result =  basicDao.findAll();
@@ -38,7 +38,7 @@ public class testTransationAop {
     public void testSave(){
         EventDao basicDao = new EventDao();
         Event e = new Event();
-        e.setName("hello");
+        e.setName("daf");
         basicDao.save(e );
     }
 }

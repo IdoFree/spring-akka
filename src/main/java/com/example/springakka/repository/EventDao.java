@@ -2,6 +2,7 @@ package com.example.springakka.repository;
 
 import com.example.springakka.aop.Transactional;
 import com.example.springakka.entity.Event;
+import com.example.springakka.util.HibernateUtil;
 import org.hibernate.Query;
 
 /**

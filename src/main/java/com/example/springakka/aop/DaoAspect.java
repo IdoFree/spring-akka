@@ -22,64 +22,26 @@ public class DaoAspect {
     private static final Logger logger = LoggerFactory.getLogger(DaoAspect.class);
     private final  static SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-    @Pointcut("within(com.example.springakka.repository..*)")
-    public void daoLayer() {}
+//    @Pointcut("within(com.example.springakka.repository..*) && target(com.example.springakka.service.TransactionManager)")
+//    public void daoLayer() {}
 
-    @Pointcut("within(com.example.springakka.service..*)")
+    @Pointcut("within(com.example.springakka.service..*) && target(com.example.springakka.service.TransactionManager)")
     public void serviceLayer() {}
 
-    @Pointcut("execution(* *(..))")
-    public void atExecution(){}
+//    @Pointcut("execution(public * *(..))")
+//    public void atPublicExecution(){}
 
-//    @Pointcut("@annotation(com.example.springakka.aop.Transactional) && daoLayer()")
+//    @Pointcut("@annotation(com.example.springakka.aop.InjectSession) && target(com.example.springakka.service.TransactionManager)")
+//    public void session(){}
+
+//    @Pointcut("@annotation(com.example.springakka.aop.Transactional) && serviceLayer()")
 //    public void daoTransationMethod() {}
     
-    @Before("daoLayer()")
-    public void injectSession(JoinPoint joinPoint) throws Throwable {
-    		logger.info("inject session before calling DAO ");
-	    	TransactionManager manager = (TransactionManager) joinPoint.getTarget();
-            logger.info("injectSession open session  ");
-	    	Session session  =  sessionFactory.openSession();
-	    	if(session == null){
-                logger.error("can not get session");
-                return ;
-            }
-            logger.info(session.toString());
-	    	manager.setSession(session);
-
-    }
 
     @Pointcut("@annotation(com.example.springakka.aop.Transactional) && serviceLayer() ")
     public void serviceTransationMethod() {}
     
     
-//    @Around("daoTransationMethod()")
-//    public Object transactionManage(ProceedingJoinPoint pjp) throws Throwable {
-//        Transaction transaction = null;
-//        TransactionManager manager = (TransactionManager) pjp.getTarget();
-//        Session session  =  sessionFactory.openSession();
-//        manager.setSession(session);
-//        Object retVal = null;
-//        try {
-//            logger.info("transaction begin");
-//            transaction = session.getTransaction();
-//            transaction.begin();
-//            retVal = pjp.proceed();
-//            transaction.commit();
-//            logger.info("transaction commit");
-//        } catch (Exception ex) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            logger.info("method : daoTransationMethod , message : DAO operation failed"+ ex.getMessage() );
-//        } finally {
-//            if (session != null) {
-//                session.close();
-//            }
-//        }
-//
-//        return retVal;
-//    }
 
 
     @Around("serviceTransationMethod()")
