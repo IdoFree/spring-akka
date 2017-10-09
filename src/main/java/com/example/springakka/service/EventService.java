@@ -3,7 +3,9 @@ package com.example.springakka.service;
 import com.example.springakka.aop.InjectSession;
 import com.example.springakka.aop.Transactional;
 import com.example.springakka.entity.Event;
+import com.example.springakka.entity.Tag;
 import com.example.springakka.repository.EventDao;
+import com.example.springakka.repository.TagDao;
 import org.hibernate.Session;
 
 import java.util.List;
@@ -13,12 +15,13 @@ import java.util.List;
  */
 public class EventService extends TransactionManager {
     private EventDao eventDao = new EventDao();
-
+    private TagDao tagDao = new TagDao();
 
     @Override
     public void setSession(Session session) {
         this.session = session;
         eventDao.setSession(session);
+        tagDao.setSession(session);
     }
 
 
@@ -26,7 +29,19 @@ public class EventService extends TransactionManager {
     public void save(Event e){
         eventDao.save(e);
 
-       
+    }
+
+    @Transactional
+    public void createEvent(Event e){
+        eventDao.save(e);
+        if(e.getName().equals("test")){
+            throw new RuntimeException("test not save");
+        }
+
+        Tag tag = new Tag();
+        tag.setName(e.getName());
+        tag.setRelateId(e.getId());
+        tagDao.save(tag);
 
     }
 

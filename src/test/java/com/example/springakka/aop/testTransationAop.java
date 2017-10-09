@@ -3,6 +3,7 @@ package com.example.springakka.aop;
 import com.example.springakka.entity.Event;
 import com.example.springakka.repository.BasicDao;
 import com.example.springakka.repository.EventDao;
+import com.example.springakka.service.EventService;
 import com.example.springakka.util.HibernateUtil;
 
 import java.util.List;
@@ -40,5 +41,17 @@ public class testTransationAop {
         Event e = new Event();
         e.setName("daf");
         basicDao.save(e );
+    }
+
+    @Test
+    public void testNestTransaction(){
+        EventService eventService = new EventService();
+        Event e = new Event();
+        e.setName("daf");
+        eventService.createEvent(e );
+
+        Event e1 = new Event();
+        e.setName("test");
+        eventService.createEvent(e1 );
     }
 }
